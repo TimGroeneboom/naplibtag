@@ -42,7 +42,8 @@ namespace nap
 
 
     AudioFileMetadata::~AudioFileMetadata()
-    { }
+    {
+    }
 
 
     bool AudioFileMetadata::isValid() const
@@ -110,7 +111,7 @@ namespace nap
             }
         }
 
-        return true;
+        return false;
     }
 
 

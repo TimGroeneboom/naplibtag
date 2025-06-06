@@ -74,6 +74,13 @@ namespace nap
          * @return true if the label was retrieved successfully, false otherwise
          */
         bool getLabel(std::string& outLabel) const;
+
+        /**
+         * Retrieves the BPM (Beats Per Minute) from the metadata.
+         * @param outBPM the output float to store the BPM
+         * @return true if the BPM was retrieved successfully, false otherwise
+         */
+        bool getBPM(float &outBPM) const;
     private:
         // Impl defined in cpp
         class Impl;

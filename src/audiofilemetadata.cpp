@@ -148,4 +148,27 @@ namespace nap
 
         return false;
     }
+
+    bool AudioFileMetadata::getBPM(float &outBPM) const
+    {
+        if (!isValid())
+            return false;
+
+        TagLib::PropertyMap props = mImpl->mFileRef.tag()->properties();
+        if (props.contains("BPM"))
+        {
+            try
+            {
+                const float bpm = std::stof(props["BPM"].toString().toCString());
+                outBPM = bpm;
+            }catch (...)
+            {
+                nap::Logger::error("Failed to parse BPM from metadata for file: %s", mImpl->mFileRef.file());
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }

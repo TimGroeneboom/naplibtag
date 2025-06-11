@@ -13,8 +13,8 @@ RTTI_END_CLASS
 namespace nap
 {
     static std::vector<std::string> release_date_names = {
-        "RELEASE_TIME", "DATE", "ORIGINAL_RELEASE_DATE", "ORIGINALDATE", "ORIGINAL_RELEASE_DATE",
-        "ORIGINAL DATE", "ORIGINAL DATE", "RELEASE DATE", "RELEASE_DATE"
+        "RELEASE_TIME", "Release Date", "ORIGINAL_RELEASE_DATE", "ORIGINALDATE", "ORIGINAL_RELEASE_DATE",
+        "ORIGINAL DATE", "ORIGINAL DATE", "RELEASE DATE", "RELEASE_DATE", "DATE"
     };
 
     static std::vector<std::string> key_names = {

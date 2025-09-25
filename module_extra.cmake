@@ -1,4 +1,3 @@
-
 if(NOT TARGET libtag)
     find_package(libtag REQUIRED)
 endif()
@@ -16,3 +15,9 @@ foreach(file ${LIBTAG_INCLUDE_FILES})
 endforeach()
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${LIBTAG_INCLUDE_DIRS})
+
+if(NAP_BUILD_CONTEXT MATCHES "source")
+else()
+    file(GLOB DYLIBS ${LIBTAG_LIBRARY_DIR}/libtag*${CMAKE_SHARED_LIBRARY_SUFFIX}*)
+    install(FILES ${DYLIBS} DESTINATION lib)
+endif()

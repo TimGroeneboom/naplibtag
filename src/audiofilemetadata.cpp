@@ -2,9 +2,22 @@
 
 #include <tag.h>
 #include <fileref.h>
+#include <iomanip>
 #include <tpropertymap.h>
 
+#include "tbytevector.h"
+#include "mpegfile.h"
+#include "id3v2tag.h"
+#include "id3v2frame.h"
+#include "id3v2header.h"
+#include "commentsframe.h"
+#include "id3v1tag.h"
 #include "nap/logger.h"
+#include "tpropertymap.h"
+#include "tstringlist.h"
+#include "tvariant.h"
+#include "fileref.h"
+#include "tag.h"
 
 RTTI_BEGIN_CLASS_NO_DEFAULT_CONSTRUCTOR(nap::AudioFileMetadata)
     RTTI_CONSTRUCTOR(const std::string&)
@@ -107,6 +120,61 @@ namespace nap
             if (props.contains(name))
             {
                 outDate = props[name].toString().toCString();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    bool AudioFileMetadata::getCoverArt(Bitmap& outBitmap, utility::ErrorState& error) const
+    {
+        const auto& properties = mImpl->mFileRef.complexProperties("PICTURE");
+        for(const auto &property : properties)
+        {
+            for(const auto &[key, value] : property)
+            {
+                if(value.type() == TagLib::Variant::ByteVector)
+                {
+                    auto byte_vector = value.value<TagLib::ByteVector>();
+                    if (!outBitmap.initFromData(byte_vector.data(), byte_vector.size(), error))
+                        return false;
+                    return true;
+                    //outCoverArt = byte_vector.;
+
+                    /* The picture could be extracted using:
+                    std::ofstream picture;
+                    TagLib::String fn(argv[i]);
+                    int slashPos = fn.rfind('/');
+                    int dotPos = fn.rfind('.');
+                    if(slashPos >= 0 && dotPos > slashPos) {
+                      fn = fn.substr(slashPos + 1, dotPos - slashPos - 1);
+                    }
+                    fn += ".jpg";
+                    picture.open(fn.toCString(), std::ios_base::out | std::ios_base::binary);
+                    picture << value.value<TagLib::ByteVector>();
+                    picture.close();
+                    */
+                }
+            }
+        }
+
+        error.fail("AudioFileMetadata : Property %s not found", "PICTURE");
+        return false;
+    }
+
+
+    bool AudioFileMetadata::hasCoverArt() const
+    {
+        if (!isValid())
+            return false;
+
+        TagLib::StringList names = mImpl->mFileRef.complexPropertyKeys();
+        for(const auto &name : names)
+        {
+            if (name == "PICTURE")
+            {
                 return true;
             }
         }

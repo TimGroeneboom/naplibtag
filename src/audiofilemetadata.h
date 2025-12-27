@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nap/core.h>
+#include <bitmap.h>
 
 namespace nap
 {
@@ -53,6 +54,10 @@ namespace nap
          * @return true if the duration was retrieved successfully, false otherwise
          */
         bool getDuration(double& outDuration) const;
+
+        bool getCoverArt(Bitmap &outBitnap, utility::ErrorState &error) const;
+
+        bool hasCoverArt() const;
 
         /**
          * Retrieves the release date from the metadata.
